@@ -2,24 +2,26 @@ package main
 
 import (
 	"embed"
-	"encoding/csv"
-	"fmt"
+	"flag"
 	"html/template"
 	"log"
-	"math/rand"
 	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
+
+	"github.com/kinduff/tech_qa/db"
+	"github.com/kinduff/tech_qa/models"
 )
 
 var (
 	//go:embed resources
 	resources embed.FS
 
-	//go:embed data/data.csv
-	data embed.FS
-
 	pages = map[string]string{
-		"/":    "resources/index.gohtml",
-		"/123": "resources/index.gohtml",
+		"/": "resources/index.gohtml",
 	}
 )
 
@@ -29,20 +31,10 @@ type ViewData struct {
 }
 
 func main() {
-	csvFile, err := data.Open("data/data.csv")
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("Successfully Opened CSV file")
-	defer csvFile.Close()
-	csvLines, err := csv.NewReader(csvFile).ReadAll()
-	if err != nil {
-		fmt.Println(err)
-	}
-	for _, line := range csvLines {
-		fmt.Println(line)
-	}
-
+	db.ConnectDatabase()
+	godotenv.Load()
+	handleArgs()
+	log.Println("Server started in port 3000")
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":3000", nil)
 }
@@ -60,24 +52,32 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	var result models.Question
+	db.DB.Raw("SELECT * FROM questions ORDER BY RANDOM() LIMIT 1;").Scan(&result)
+
 	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusOK)
 
-	in := []ViewData{
-		{
-			Name:  "foo",
-			Price: 100,
-		},
-		{
-			Name:  "bar",
-			Price: 200,
-		},
-	}
-	randomIndex := rand.Intn(len(in))
-	pick := in[randomIndex]
-
-	err = tpl.Execute(w, pick)
+	err = tpl.Execute(w, result)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func handleArgs() {
+	flag.Parse()
+	args := flag.Args()
+
+	if len(args) >= 1 {
+		switch args[0] {
+		case "seed":
+			database, err := gorm.Open(sqlite.Open("./data/database.db"), &gorm.Config{})
+			if err != nil {
+				log.Fatalf("Error opening DB: %v", err)
+			}
+			db.ExecuteSeed(database, args[1:]...)
+			os.Exit(0)
+		}
 	}
 }

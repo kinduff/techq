@@ -1,11 +1,11 @@
 package db
 
 import (
-	"log"
-
-	"github.com/kinduff/tech_qa/models"
+	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+
+	"github.com/kinduff/tech_qa/internal/models"
 )
 
 var DB *gorm.DB
@@ -22,7 +22,17 @@ func ConnectDatabase() {
 	DB = database
 }
 
-func CreateDB(db *gorm.DB) {
+func DropDB(db *gorm.DB) {
+	log.Println("Dropping database...")
 	db.Migrator().DropTable(&models.Question{})
+}
+
+func CreateDB(db *gorm.DB) {
+	log.Println("Creating database...")
 	db.AutoMigrate(&models.Question{})
+}
+
+func SetupDB(db *gorm.DB) {
+	DropDB(db)
+	CreateDB(db)
 }

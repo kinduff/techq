@@ -1,66 +1,44 @@
 package main
 
 import (
-	"embed"
 	"flag"
-	"html/template"
-	"log"
-	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 
-	"github.com/kinduff/tech_qa/db"
-	"github.com/kinduff/tech_qa/models"
+	"github.com/kinduff/tech_qa/config/db"
+	"github.com/kinduff/tech_qa/internal/server"
 )
 
 var (
-	//go:embed resources
-	resources embed.FS
-
-	pages = map[string]string{
-		"/": "resources/index.gohtml",
-	}
+	s *server.Server
 )
-
-type ViewData struct {
-	Name  string
-	Price int
-}
 
 func main() {
 	db.ConnectDatabase()
 	godotenv.Load()
 	handleArgs()
-	log.Println("Server started in port 3000")
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":3000", nil)
+
+	initHTTPServer("3000")
+	handleExitSignal()
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	page, ok := pages[r.URL.Path]
-	if !ok {
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
+func initHTTPServer(port string) {
+	s = server.NewServer(port)
+	go s.ListenAndServe()
+}
 
-	tpl, err := template.ParseFS(resources, page)
-	if err != nil {
-		log.Printf("page %s not found in pages cache...", r.RequestURI)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+func handleExitSignal() {
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 
-	var result models.Question
-	db.DB.Raw("SELECT * FROM questions ORDER BY RANDOM() LIMIT 1;").Scan(&result)
+	<-stop
 
-	w.Header().Set("Content-Type", "text/html")
-	w.WriteHeader(http.StatusOK)
-
-	err = tpl.Execute(w, result)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	s.Stop()
+	log.Fatal("HTTP server stopped")
 }
 
 func handleArgs() {
@@ -74,6 +52,13 @@ func handleArgs() {
 			os.Exit(0)
 		case "create":
 			db.CreateDB(db.DB)
+			os.Exit(0)
+		case "drop":
+			db.DropDB(db.DB)
+			os.Exit(0)
+		case "setup":
+			db.SetupDB(db.DB)
+			db.ExecuteSeed(db.DB)
 			os.Exit(0)
 		}
 	}

@@ -3,11 +3,12 @@ package db
 import (
 	"bufio"
 	"embed"
-	"log"
 	"reflect"
 
-	"github.com/kinduff/tech_qa/models"
+	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
+
+	"github.com/kinduff/tech_qa/internal/models"
 )
 
 // Seeder type
@@ -26,39 +27,30 @@ func ExecuteSeed(db *gorm.DB, seedMethodNames ...string) {
 
 	seedType := reflect.TypeOf(s)
 
-	// Execute all seeders if no method name is given
 	if len(seedMethodNames) == 0 {
 		log.Println("Running all seeder...")
-		// We are looping over the method on a Seed struct
 		for i := 0; i < seedType.NumMethod(); i++ {
-			// Get the method in the current iteration
 			method := seedType.Method(i)
-			// Execute seeder
 			callSeed(s, method.Name)
 		}
 	}
 
-	// Execute only the given method names
 	for _, item := range seedMethodNames {
 		callSeed(s, item)
 	}
 }
 
 func callSeed(s Seed, seedMethodName string) {
-	// Get the reflect value of the method
 	m := reflect.ValueOf(s).MethodByName(seedMethodName)
-	// Exit if the method doesn't exist
 	if !m.IsValid() {
 		log.Fatal("No method called ", seedMethodName)
 	}
-	// Execute the method
-	log.Println("Seeding", seedMethodName, "...")
+	log.Printf("Seeding %s...", seedMethodName)
 	m.Call(nil)
-	log.Println("Seed", seedMethodName, "succeeded")
+	log.Printf("Seed %s succeeded", seedMethodName)
 }
 
 func (s Seed) QuestionSeed() {
-	// Get the file
 	file, err := seeds.Open("seeds/questions.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -67,7 +59,6 @@ func (s Seed) QuestionSeed() {
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
-		// Get the line
 		line := scanner.Text()
 		s.db.Create(&models.Question{Body: line})
 	}

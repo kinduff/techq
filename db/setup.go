@@ -19,7 +19,10 @@ func ConnectDatabase() {
 
 	log.Println("Connected to database")
 
-	database.AutoMigrate(&models.Question{})
-
 	DB = database
+}
+
+func CreateDB(db *gorm.DB) {
+	db.Migrator().DropTable(&models.Question{})
+	db.AutoMigrate(&models.Question{})
 }

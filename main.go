@@ -9,8 +9,6 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 
 	"github.com/kinduff/tech_qa/db"
 	"github.com/kinduff/tech_qa/models"
@@ -72,11 +70,10 @@ func handleArgs() {
 	if len(args) >= 1 {
 		switch args[0] {
 		case "seed":
-			database, err := gorm.Open(sqlite.Open("./data/database.db"), &gorm.Config{})
-			if err != nil {
-				log.Fatalf("Error opening DB: %v", err)
-			}
-			db.ExecuteSeed(database, args[1:]...)
+			db.ExecuteSeed(db.DB, args[1:]...)
+			os.Exit(0)
+		case "create":
+			db.CreateDB(db.DB)
 			os.Exit(0)
 		}
 	}

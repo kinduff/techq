@@ -3,6 +3,9 @@ package resources
 import "embed"
 
 var (
-	//go:embed views/*
-	Views embed.FS
+	//go:embed templates
+	Templates embed.FS
+
+	//go:embed static
+	Statics embed.FS
 )

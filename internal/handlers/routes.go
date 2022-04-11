@@ -15,7 +15,7 @@ var (
 	question models.Question
 
 	pages = map[string]string{
-		"/": "views/index.gohtml",
+		"/": "templates/index.gohtml",
 	}
 )
 
@@ -26,7 +26,7 @@ func RoutesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tpl, err := template.ParseFS(resources.Views, page)
+	tpl, err := template.ParseFS(resources.Templates, page)
 	if err != nil {
 		log.Printf("page %s - %s not found in pages cache...", r.RequestURI, page)
 		w.WriteHeader(http.StatusInternalServerError)

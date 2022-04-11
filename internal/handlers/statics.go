@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	resources "github.com/kinduff/tech_qa/internal"
+	resources "github.com/kinduff/tech_qa/resources"
 )
 
 func StaticHandler() http.Handler {

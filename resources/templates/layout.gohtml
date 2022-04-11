@@ -1,0 +1,17 @@
+{{define "layout"}}
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title>{{template "title" .}} - TechQ</title>
+  </head>
+  <body>
+    <header>
+      <h1><a href='/'>TechQ</a></h1>
+    </header>
+    <main>
+      {{template "main" .}}
+    </main>
+  </body>
+</html>
+{{end}}

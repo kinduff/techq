@@ -26,7 +26,8 @@ func NewServer(port string) *Server {
 	}
 
 	mux.Handle("/static/", handlers.StaticHandler())
-	mux.HandleFunc("/", handlers.RoutesHandler)
+	mux.HandleFunc("/", handlers.IndexHandler)
+	mux.HandleFunc("/q/", handlers.ShowHandler)
 
 	return s
 }

@@ -3,6 +3,5 @@
 {{define "title"}}Home{{end}}
 
 {{define "main"}}
-<h3>{{ .ID }}</h3>
-<p>{{ .Body }}</p>
+<p contenteditable="true" onclick="document.execCommand('selectAll', false, null)">{{ .Body }}</p>
 {{end}}

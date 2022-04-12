@@ -10,6 +10,11 @@ import (
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" || r.URL.Path != "/" {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
 	tpl, err := template.ParseFS(resources.Templates, "templates/index.gohtml", "templates/layout.gohtml")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

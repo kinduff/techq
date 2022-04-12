@@ -14,21 +14,21 @@ func ConnectDatabase() {
 	database, err := gorm.Open(sqlite.Open("./data/database.db"), &gorm.Config{})
 
 	if err != nil {
-		panic("Failed to connect to database!")
+		log.WithField("event", "database").Fatal("Failed to connect to database!")
 	}
 
-	log.Println("Connected to database")
+	log.WithField("event", "database").Info("Connected to database")
 
 	DB = database
 }
 
 func DropDB(db *gorm.DB) {
-	log.Println("Dropping database...")
+	log.WithField("event", "database").Info("Dropping database")
 	db.Migrator().DropTable(&models.Question{})
 }
 
 func CreateDB(db *gorm.DB) {
-	log.Println("Creating database...")
+	log.WithField("event", "database").Info("Creating database")
 	db.AutoMigrate(&models.Question{})
 }
 

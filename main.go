@@ -38,7 +38,7 @@ func handleExitSignal() {
 	<-stop
 
 	s.Stop()
-	log.Fatal("HTTP server stopped")
+	log.WithField("event", "server").Fatal("HTTP server stopped")
 }
 
 func handleArgs() {

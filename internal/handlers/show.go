@@ -20,9 +20,9 @@ func ShowHandler(w http.ResponseWriter, r *http.Request) {
 	id := strings.TrimPrefix(r.URL.Path, "/q/")
 
 	var question models.Question
-	result := db.DB.First(&question, id)
+	err = db.DB.First(&question, id).Error
 
-	if result.Error != nil {
+	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}

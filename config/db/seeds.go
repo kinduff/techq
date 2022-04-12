@@ -28,7 +28,7 @@ func ExecuteSeed(db *gorm.DB, seedMethodNames ...string) {
 	seedType := reflect.TypeOf(s)
 
 	if len(seedMethodNames) == 0 {
-		log.Println("Running all seeder...")
+		log.WithField("event", "seeder").Info("Running all seeders")
 		for i := 0; i < seedType.NumMethod(); i++ {
 			method := seedType.Method(i)
 			callSeed(s, method.Name)
@@ -43,17 +43,31 @@ func ExecuteSeed(db *gorm.DB, seedMethodNames ...string) {
 func callSeed(s Seed, seedMethodName string) {
 	m := reflect.ValueOf(s).MethodByName(seedMethodName)
 	if !m.IsValid() {
-		log.Fatal("No method called ", seedMethodName)
+		log.WithFields(log.Fields{
+			"seedMethodName": seedMethodName,
+			"event":          "seeder",
+		}).Fatal("Undefined seed")
 	}
-	log.Printf("Seeding %s...", seedMethodName)
+
+	log.WithFields(log.Fields{
+		"seedMethodName": seedMethodName,
+		"event":          "seeder",
+	}).Fatal("Seeding")
+
 	m.Call(nil)
-	log.Printf("Seed %s succeeded", seedMethodName)
+
+	log.WithFields(log.Fields{
+		"seedMethodName": seedMethodName,
+		"event":          "seeder",
+	}).Fatal("Seeding succeeded")
 }
 
 func (s Seed) QuestionSeed() {
 	file, err := seeds.Open("seeds/questions.txt")
 	if err != nil {
-		log.Fatal(err)
+		log.WithFields(log.Fields{
+			"event": "seeder",
+		}).Fatal(err)
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)

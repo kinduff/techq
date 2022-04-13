@@ -9,6 +9,7 @@ import (
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 
+	"github.com/kinduff/tech_qa/config"
 	"github.com/kinduff/tech_qa/config/db"
 	"github.com/kinduff/tech_qa/internal/server"
 )
@@ -18,11 +19,17 @@ var (
 )
 
 func main() {
-	db.ConnectDatabase()
-	godotenv.Load()
-	handleArgs()
+	if err := godotenv.Load(); err != nil {
+		log.WithField("event", "dotenv").Info("No .env file found")
+	} else {
+		log.WithField("event", "dotenv").Info("Loaded .env file")
+	}
 
-	initHTTPServer("3000")
+	conf := config.New()
+
+	db.ConnectDatabase()
+	handleArgs()
+	initHTTPServer(conf.Port)
 	handleExitSignal()
 }
 

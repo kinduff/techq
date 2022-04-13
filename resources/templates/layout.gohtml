@@ -1,15 +1,21 @@
-{{define "layout"}}
+{{ define "layout" }}
 <!doctype html>
 <html lang='en'>
   <head>
-    <meta charset='utf-8'>
-    <title>{{template "title" .}} - TechQ</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ block "title" . }}{{end}} - TechQ</title>
     <link rel='stylesheet' href='/static/style.css'>
   </head>
   <body>
+    {{ block "permalink" . }}{{end}}
     <main>
-      {{template "main" .}}
+      {{ block "main" . }}{{end}}
     </main>
+    <a class="logo" href="/">TechQ</a>
+    <a class="shuffle" href="/">🔀</a>
   </body>
 </html>
-{{end}}
+{{ end }}

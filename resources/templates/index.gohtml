@@ -1,7 +1,11 @@
 {{template "layout" .}}
 
-{{define "title"}}Home{{end}}
+{{define "title"}}Good Random Tech Questions{{end}}
 
 {{define "main"}}
-<p contenteditable="true" onclick="document.execCommand('selectAll', false, null)">{{ .Body }}</p>
+  <p contenteditable="true" onclick="document.execCommand('selectAll', false, null)">{{ .Body }}</p>
+{{end}}
+
+{{define "permalink"}}
+  <a class="permalink" href="/q/{{ .ID }}">🔗</a>
 {{end}}

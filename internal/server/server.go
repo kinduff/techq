@@ -67,6 +67,7 @@ func withLogging(h http.HandlerFunc) http.HandlerFunc {
 			"uri":      uri,
 			"method":   method,
 			"duration": duration,
+			"event":    "request",
 		}).Info("Request served")
 	}
 	return http.HandlerFunc(logFn)

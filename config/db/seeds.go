@@ -46,20 +46,20 @@ func callSeed(s Seed, seedMethodName string) {
 		log.WithFields(log.Fields{
 			"seedMethodName": seedMethodName,
 			"event":          "seeder",
-		}).Fatal("Undefined seed")
+		}).Info("Undefined seed")
 	}
 
 	log.WithFields(log.Fields{
 		"seedMethodName": seedMethodName,
 		"event":          "seeder",
-	}).Fatal("Seeding")
+	}).Info("Seeding")
 
 	m.Call(nil)
 
 	log.WithFields(log.Fields{
 		"seedMethodName": seedMethodName,
 		"event":          "seeder",
-	}).Fatal("Seeding succeeded")
+	}).Info("Seeding succeeded")
 }
 
 func (s Seed) QuestionSeed() {

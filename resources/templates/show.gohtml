@@ -1,8 +1,7 @@
 {{template "layout" .}}
 
-{{define "title"}}{{ .ID }}{{end}}
+{{define "title"}}#{{ .ID }}{{end}}
 
 {{define "main"}}
-<h3>{{ .ID }}</h3>
-<p>{{ .Body }}</p>
+  <p>{{ .Body }}</p>
 {{end}}

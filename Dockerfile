@@ -21,4 +21,6 @@ WORKDIR /root/
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/src/github.com/kinduff/techq/binary techq
 
+EXPOSE 3000
+
 CMD ["./techq"]

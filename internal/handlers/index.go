@@ -4,11 +4,12 @@ import (
 	"net/http"
 	"text/template"
 
-	"github.com/kinduff/tech_qa/config/db"
+	"github.com/kinduff/tech_qa/db"
 	"github.com/kinduff/tech_qa/internal/models"
 	resources "github.com/kinduff/tech_qa/resources"
 )
 
+// IndexHandler handles the root path.
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" || r.URL.Path != "/" {
 		w.WriteHeader(http.StatusNotFound)

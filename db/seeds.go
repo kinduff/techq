@@ -21,7 +21,7 @@ var (
 	seeds embed.FS
 )
 
-// Execute will executes the given seeder method
+// ExecuteSeed will executes the given seeder methods.
 func ExecuteSeed(db *gorm.DB, seedMethodNames ...string) {
 	s := Seed{db}
 
@@ -62,6 +62,7 @@ func callSeed(s Seed, seedMethodName string) {
 	}).Info("Seeding succeeded")
 }
 
+// QuestionSeed method seeds the questions from the txt file.
 func (s Seed) QuestionSeed() {
 	file, err := seeds.Open("seeds/questions.txt")
 	if err != nil {

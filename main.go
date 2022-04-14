@@ -10,7 +10,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/kinduff/tech_qa/config"
-	"github.com/kinduff/tech_qa/config/db"
+	"github.com/kinduff/tech_qa/db"
 	"github.com/kinduff/tech_qa/internal/server"
 )
 

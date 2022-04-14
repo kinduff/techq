@@ -5,11 +5,12 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/kinduff/tech_qa/config/db"
+	"github.com/kinduff/tech_qa/db"
 	"github.com/kinduff/tech_qa/internal/models"
 	resources "github.com/kinduff/tech_qa/resources"
 )
 
+// ShowHandler handles the /q/{id} path.
 func ShowHandler(w http.ResponseWriter, r *http.Request) {
 	tpl, err := template.ParseFS(resources.Templates, "templates/show.gohtml", "templates/layout.gohtml")
 	if err != nil {

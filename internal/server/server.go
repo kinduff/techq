@@ -11,12 +11,12 @@ import (
 	"github.com/kinduff/tech_qa/internal/handlers"
 )
 
+// Server is an HTTP server.
 type Server struct {
 	httpServer *http.Server
 }
 
-// NewServer method initializes a new HTTP server instance and associates
-// the different routes that will be used by Prometheus (metrics) or for monitoring (health)
+// NewServer method initializes a new HTTP server instance and uses the defined handlers.
 func NewServer(port string) *Server {
 	mux := http.NewServeMux()
 	httpServer := &http.Server{Addr: ":" + port, Handler: mux}
@@ -44,15 +44,17 @@ func (s *Server) ListenAndServe() {
 	}
 }
 
-// Stop method stops the HTTP server (so the exporter become unavailable).
+// Stop method stops the HTTP server.
 func (s *Server) Stop() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	s.httpServer.Shutdown(ctx)
+	err := s.httpServer.Shutdown(ctx)
+	if err != nil {
+		log.WithField("event", "server").Fatal(err)
+	}
 }
 
-// withLogging wraps the handler as a middleware that logs the request
 func withLogging(h http.HandlerFunc) http.HandlerFunc {
 	logFn := func(rw http.ResponseWriter, r *http.Request) {
 		start := time.Now()

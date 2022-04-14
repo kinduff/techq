@@ -19,7 +19,9 @@ type config struct {
 // LoadConfig loads the configuration.
 func LoadConfig() {
 	loadDotEnv()
-	Conf = new()
+	Conf = &config{
+		Port: getEnv("PORT", "3000"),
+	}
 }
 
 // HandleArgs handles the command line arguments.
@@ -51,12 +53,6 @@ func loadDotEnv() {
 		log.WithField("event", "dotenv").Info("No .env file found")
 	} else {
 		log.WithField("event", "dotenv").Info("Loaded .env file")
-	}
-}
-
-func new() *config {
-	return &config{
-		Port: getEnv("PORT", "3000"),
 	}
 }
 

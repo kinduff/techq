@@ -9,17 +9,20 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Conf is the global configuration.
 var Conf *config
 
 type config struct {
 	Port string
 }
 
+// LoadConfig loads the configuration.
 func LoadConfig() {
 	loadDotEnv()
 	Conf = new()
 }
 
+// HandleArgs handles the command line arguments.
 func HandleArgs() {
 	flag.Parse()
 	args := flag.Args()

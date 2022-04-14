@@ -16,20 +16,17 @@ import (
 
 var (
 	s *server.Server
+
+	// Conf is the global configuration.
+	Conf *config.Config
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.WithField("event", "dotenv").Info("No .env file found")
-	} else {
-		log.WithField("event", "dotenv").Info("Loaded .env file")
-	}
-
-	conf := config.New()
-
+	loadDotEnv()
+	loadConfig()
 	db.ConnectDatabase()
 	handleArgs()
-	initHTTPServer(conf.Port)
+	initHTTPServer(Conf.Port)
 	handleExitSignal()
 }
 
@@ -69,4 +66,16 @@ func handleArgs() {
 			os.Exit(0)
 		}
 	}
+}
+
+func loadDotEnv() {
+	if err := godotenv.Load(); err != nil {
+		log.WithField("event", "dotenv").Info("No .env file found")
+	} else {
+		log.WithField("event", "dotenv").Info("Loaded .env file")
+	}
+}
+
+func loadConfig() {
+	Conf = config.New()
 }

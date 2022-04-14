@@ -2,7 +2,7 @@ package db
 
 import (
 	"bufio"
-	"embed"
+	"os"
 	"reflect"
 
 	log "github.com/sirupsen/logrus"
@@ -17,8 +17,7 @@ type Seed struct {
 }
 
 var (
-	//go:embed seeds
-	seeds embed.FS
+	seeds os.File
 )
 
 // ExecuteSeed will executes the given seeder methods.
@@ -64,7 +63,7 @@ func callSeed(s Seed, seedMethodName string) {
 
 // QuestionSeed method seeds the questions from the txt file.
 func (s Seed) QuestionSeed() {
-	file, err := seeds.Open("seeds/questions.txt")
+	file, err := os.Open("db/seeds/questions.txt")
 	if err != nil {
 		log.WithFields(log.Fields{
 			"event": "seeder",

@@ -7,3 +7,6 @@
 *.out
 vendor/
 tmp/
+data/*
+!data/.keep
+database.db

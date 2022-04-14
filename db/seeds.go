@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 
-	"github.com/kinduff/tech_qa/internal/models"
+	"github.com/kinduff/techq/internal/models"
 )
 
 // Seeder type

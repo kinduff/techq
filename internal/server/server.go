@@ -8,7 +8,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/kinduff/tech_qa/internal/handlers"
+	"github.com/kinduff/techq/internal/handlers"
 )
 
 // Server is an HTTP server.

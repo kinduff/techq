@@ -5,7 +5,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
-	"github.com/kinduff/tech_qa/internal/models"
+	"github.com/kinduff/techq/internal/models"
 )
 
 // DB is the database connection.

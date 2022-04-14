@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	resources "github.com/kinduff/tech_qa/resources"
+	resources "github.com/kinduff/techq/resources"
 )
 
 // StaticHandler handles static files.

@@ -1,4 +1,4 @@
-module github.com/kinduff/tech_qa
+module github.com/kinduff/techq
 
 go 1.17
 

@@ -5,9 +5,9 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/kinduff/tech_qa/db"
-	"github.com/kinduff/tech_qa/internal/models"
-	resources "github.com/kinduff/tech_qa/resources"
+	"github.com/kinduff/techq/db"
+	"github.com/kinduff/techq/internal/models"
+	resources "github.com/kinduff/techq/resources"
 )
 
 // ShowHandler handles the /q/{id} path.

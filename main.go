@@ -7,9 +7,9 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/kinduff/tech_qa/config"
-	"github.com/kinduff/tech_qa/db"
-	"github.com/kinduff/tech_qa/internal/server"
+	"github.com/kinduff/techq/config"
+	"github.com/kinduff/techq/db"
+	"github.com/kinduff/techq/internal/server"
 )
 
 var (

@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/kinduff/tech_qa/db"
+	"github.com/kinduff/techq/db"
 	log "github.com/sirupsen/logrus"
 )
 

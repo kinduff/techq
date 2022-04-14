@@ -10,3 +10,6 @@ tmp/
 data/*
 !data/.keep
 database.db
+db/seeds/*
+!db/seeds/.keep
+database.db
